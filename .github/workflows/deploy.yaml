@@ -2,17 +2,17 @@ name: Deploy to ECR
 
 on:
   push:
-    branches: [ "main" ] # 메인 브랜치에 코드가 올라올 때 실행
+    branches: [ "main" ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # v3 -> v4 업그레이드
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v4 # v1 -> v4 업그레이드 (중요!)
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -20,22 +20,25 @@ jobs:
 
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      uses: aws-actions/amazon-ecr-login@v2 # v1 -> v2 업그레이드 (비밀번호 마스킹 지원)
 
     - name: Build, tag, and push image to Amazon ECR
+      id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: hifive-web-app # 이전에 만든 ECR 리포지토리 이름
+        ECR_REPOSITORY: hifive-web-app
         IMAGE_TAG: latest
       run: |
+        # ./app 경로가 맞는지 확인하세요. 파일이 루트에 있다면 . 으로 수정 필요
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./app
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        # [중요] Deprecated된 set-output 대신 Environment Files 사용
+        
+        # GITHUB_OUTPUT은 이 위치에서 값을 기록해야 합니다.
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Update EKS Deployment
       run: |
         aws eks update-kubeconfig --region ap-northeast-2 --name hifive-lab-eks
-        # 새 이미지로 Deployment 업데이트를 강제 실행합니다.
+        # Deployment 이름이 hifive-app 인지 확인 (k8s/deployment.yml의 name과 일치해야 함)
         kubectl set image deployment/hifive-app hifive-app=${{ steps.login-ecr.outputs.registry }}/hifive-web-app:latest
         kubectl rollout restart deployment/hifive-app
