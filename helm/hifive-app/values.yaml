@@ -1,0 +1,8 @@
+replicaCount: 2
+image:
+  repository: 601766312629.dkr.ecr.ap-northeast-2.amazonaws.com/hifive-web-app
+  tag: latest
+  pullPolicy: Always
+service:
+  type: LoadBalancer
+  port: 80

@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hifive-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/melanieing/hifive-lab.git
+    targetRevision: HEAD
+    path: helm/hifive-app # 아까 만든 헬름 차트 경로
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: hifive-app
+description: A Helm chart for hifive-lab web app
+version: 0.1.0
+appVersion: "1.0.0"
