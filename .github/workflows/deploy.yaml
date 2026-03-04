@@ -30,3 +30,10 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./app
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Update EKS Deployment
+      run: |
+        aws eks update-kubeconfig --region ap-northeast-2 --name hifive-lab-eks
+        # 새 이미지로 Deployment 업데이트를 강제 실행합니다.
+        kubectl set image deployment/hifive-app hifive-app=${{ steps.login-ecr.outputs.registry }}/hifive-web-app:latest
+        kubectl rollout restart deployment/hifive-app
