@@ -42,3 +42,7 @@ jobs:
         # Deployment 이름이 hifive-app 인지 확인 (k8s/deployment.yml의 name과 일치해야 함)
         kubectl set image deployment/hifive-app hifive-app=${{ steps.login-ecr.outputs.registry }}/hifive-web-app:latest
         kubectl rollout restart deployment/hifive-app
+
+    - name: Install dependencies
+      run: |
+        pip install boto3 python-hcl2 # hcl2 파서 추가
