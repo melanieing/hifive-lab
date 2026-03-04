@@ -82,6 +82,7 @@ resource "aws_instance" "app_server" {
 resource "aws_ecr_repository" "hifive_repo" {
     name                 = "hifive-web-app"
     image_tag_mutability = "MUTABLE"
+    force_delete = true
 
     image_scanning_configuration {
         scan_on_push = true # 이미지를 올릴 때 보안 취약점을 자동으로 스캔합니다.

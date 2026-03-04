@@ -2,7 +2,7 @@
 # 테라폼의 '상태 파일(.tfstate)'을 저장하는 원격 저장소 역할
 resource "aws_s3_bucket" "terraform_state" {
     bucket = "hifive-lab-tfstate-${random_string.suffix.result}" # 유일한 이름 생성
-
+    force_destroy = true
     lifecycle {
         prevent_destroy = false # 실습용이므로 삭제 가능하게 설정 (실무에선 true)
     }

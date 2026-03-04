@@ -14,6 +14,7 @@ resource "aws_subnet" "public_1" {
     vpc_id = aws_vpc.main.id
     cidr_block = var.public_subnet_cidr
     availability_zone = "${var.region}a"
+    map_public_ip_on_launch = true # 퍼블릭 IP 자동 할당 옵션을 추가
 
     tags = {
         Name = "${var.project_name}-public-1"
