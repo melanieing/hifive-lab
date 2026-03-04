@@ -1,0 +1,24 @@
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files (보안상 절대 올리면 안 됨)
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Exclude private (.tfvars) files
+*.tfvars
+*.tfvars.json
+
+# Variables and secret files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Apple/Windows OS files
+.DS_Store
+Thumbs.db
