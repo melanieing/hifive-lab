@@ -3,7 +3,7 @@ module "eks" {
     version = "~> 19.0"
 
     cluster_name    = "${var.project_name}-eks" # 변수 사용
-    cluster_version = "1.28"
+    cluster_version = "1.29"
 
     vpc_id                         = aws_vpc.main.id
     subnet_ids                     = [aws_subnet.public_1.id, aws_subnet.public_2.id]

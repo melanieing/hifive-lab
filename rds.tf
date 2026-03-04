@@ -37,9 +37,9 @@ resource "aws_db_subnet_group" "main" {
 resource "aws_rds_cluster" "aurora" {
     cluster_identifier      = "${var.project_name}-aurora"
     engine                  = "aurora-postgresql"
-    engine_version          = "15.4"
+    engine_version          = "16"
     database_name           = "hifivedb"
-    master_username         = "admin"
+    master_username         = "hifive_admin"
     master_password         = "hifive1234!" # 실습용 비밀번호
     
     db_subnet_group_name    = aws_db_subnet_group.main.name
